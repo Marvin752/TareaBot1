@@ -60,13 +60,13 @@ public class TareaBot extends TelegramLongPollingBot {
             //manejo de mensajes
 
             if (message_text.toLowerCase().equals("hola")) {
-                sendText(chat_id, "👋 Hola " + nombre + " gusto de saludarte ✅");
+                sendText(chat_id, "👋  Hola " + nombre + " gusto de saludarte  ✅");
             }
 
             //Para cuando el usuario inicie el bot
 
             if (message_text.toLowerCase().equals("/start")) {
-                String mensaje = "Hola " + nombre + " 👋, ¿Qué deseas hacer hoy? ✅\n\n";
+                String mensaje = "Hola " + nombre + " 👋,  ¿Qué deseas hacer hoy?  ✅\n\n";
                 mensaje += "/info\n";
                 mensaje += "/progra\n";
                 mensaje += "/hola\n";
@@ -77,7 +77,7 @@ public class TareaBot extends TelegramLongPollingBot {
             //Para el caso del hola
 
             if (message_text.toLowerCase().equals("/hola")) {
-                String mensaje = "Hola " + nombre +" hoy es " + fechaFormateada + " 🗓️ a las " + horaFormateada + " 🕜";
+                String mensaje = "Hola " + nombre +" hoy es " + fechaFormateada + "  🗓️  a las " + horaFormateada + "  🕜";
                 sendText(chat_id, mensaje);
             }
 
