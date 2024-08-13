@@ -1,4 +1,5 @@
 package umg.programacion2.BotTelegram;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -7,21 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class TareaBot extends TelegramLongPollingBot {
-    // Obtener la fecha y hora actuales
 
-    LocalDateTime fechaHoraActual = LocalDateTime.now();
+    //Funcion para el cambio
 
-    // Formatear solo la fecha
-
-    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    String fechaFormateada = fechaHoraActual.format(formatoFecha);
-
-    // Formatear solo la hora
-
-    DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm:ss");
-    String horaFormateada = fechaHoraActual.format(formatoHora);
-
-    public float cambio (float x)
+    public double cambio (double x)
     {
         x = x*8.51f;
         return x;
@@ -77,6 +67,19 @@ public class TareaBot extends TelegramLongPollingBot {
             //Para el caso del hola
 
             if (message_text.toLowerCase().equals("/hola")) {
+                // Obtener la fecha y hora actuales
+
+                LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+                // Formatear solo la fecha
+
+                DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String fechaFormateada = fechaHoraActual.format(formatoFecha);
+
+                // Formatear solo la hora
+
+                DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+                String horaFormateada = fechaHoraActual.format(formatoHora);
                 String mensaje = "Hola " + nombre +" hoy es " + fechaFormateada + "  🗓️  a las " + horaFormateada + "  🕜";
                 sendText(chat_id, mensaje);
             }
@@ -101,6 +104,9 @@ public class TareaBot extends TelegramLongPollingBot {
                 mensaje += "Sección: A";
                 sendText(chat_id, mensaje);
             }
+
+            //Comando para el cambio
+
             if(message_text.toLowerCase().startsWith("/cambio")) {
                 //Aca extraigo solo la cantidad
                 String[] cantidad = message_text.split(" ");
@@ -109,14 +115,23 @@ public class TareaBot extends TelegramLongPollingBot {
 
                         //Separo el /cambio y el numero
 
-                        float dinero = Float.parseFloat(cantidad[1]);
+                        double dinero = Double.parseDouble(cantidad[1]);
+
 
                         //Uso mi funcion para convertir
 
-                        float x = cambio(dinero);
+                        double x = cambio(dinero);
 
-                        String mensaje = "La cantidad ingresada fue €" + dinero + "\n";
-                        mensaje += "En valor en Quetzales es de: Q" + x;
+                        //Ajusto a dos decimales
+
+                        DecimalFormat formato = new DecimalFormat("#.00");
+                        String DineroFormateado = formato.format(dinero);
+                        String XFormateado = formato.format(x);
+
+                        //Hago el mensaje
+
+                        String mensaje = "La cantidad ingresada fue €" + DineroFormateado + "\n";
+                        mensaje += "En valor en Quetzales es de: Q" + XFormateado;
 
                         //Mando la conversion al usuario
 
