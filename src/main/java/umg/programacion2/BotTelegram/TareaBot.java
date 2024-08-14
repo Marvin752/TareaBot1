@@ -3,7 +3,6 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -83,13 +82,13 @@ public class TareaBot extends TelegramLongPollingBot {
 
                 DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm:ss");
                 String horaFormateada = fechaHoraActual.format(formatoHora);
-                String mensaje = "Hola " + nombre +" hoy es " + fechaFormateada + "  🗓️  a las " + horaFormateada + "  🕜";
+                String mensaje = "Hola " + nombre + " hoy es " + fechaFormateada + "  🗓️  a las " + horaFormateada + "  🕜";
                 sendText(chat_id, mensaje);
             }
 
             //El comentario del comando progra
 
-            if(message_text.toLowerCase().equals("/progra")) {
+            if (message_text.toLowerCase().equals("/progra")) {
                 String mensaje = "El curso de programación es una clase muy interesante, me parece increíble la ";
                 mensaje += "manera en la que hay muchas formas para resolver un mismo problema, como también la ";
                 mensaje += "capacidad de los dispositivos para realizar de forma lógica y correcta las instrucciones ";
@@ -100,7 +99,7 @@ public class TareaBot extends TelegramLongPollingBot {
 
             //Informacion personal
 
-            if(message_text.toLowerCase().equals("/info")) {
+            if (message_text.toLowerCase().equals("/info")) {
                 String mensaje = "Nombre: Marvin Cámbara\n";
                 mensaje += "Carnet: 0905-23-17848\n";
                 mensaje += "Semestre: Cuarto\n";
@@ -110,11 +109,11 @@ public class TareaBot extends TelegramLongPollingBot {
 
             //Comando para el cambio
 
-            if(message_text.toLowerCase().startsWith("/cambio")) {
+            if (message_text.toLowerCase().startsWith("/cambio")) {
                 //Aca extraigo solo la cantidad
                 String[] cantidad = message_text.split(" ");
-                if(cantidad.length == 2) {
-                    try{
+                if (cantidad.length == 2) {
+                    try {
 
                         //Separo el /cambio y el numero
 
@@ -142,18 +141,18 @@ public class TareaBot extends TelegramLongPollingBot {
 
                         //Para enviar un mensaje a 4 de mis compañeros
 
-                    }catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         // Manejo de error en caso de que el parámetro no sea un número válido
                         sendText(chat_id, "Error: La cantidad ingresada no es válida. Por favor, ingresa un número.");
                     }
                 } else {
-                sendText(chat_id, "Uso incorrecto del comando. Por favor ingresar la cantidad después de /cambio.");
-            }
+                    sendText(chat_id, "Uso incorrecto del comando. Por favor ingresar la cantidad después de /cambio.");
+                }
             }
 
             //Comando para mandar mensaje a mis compañeros
 
-            if(message_text.toLowerCase().startsWith("/send")) {
+            if (message_text.toLowerCase().startsWith("/send")) {
 
                 //Extraigo el mensaje luego del /send
 
@@ -162,29 +161,40 @@ public class TareaBot extends TelegramLongPollingBot {
                 //Corroboro que el usuario haya escrito algo luego del /send
 
                 if (!mensaje.isEmpty()) {
+                        //Variables para que funcione algo
 
-                    //Paso a mayuscula la primera letra luego de Send
+                        Long idgrupal;
+
+                        //Paso a mayuscula la primera letra luego de Send
 
                         mensaje = mensaje.substring(0, 1).toUpperCase() + mensaje.substring(1);
+                        mensaje += "\n\n Enviado por: " + nombre + " " + apellido;
 
                         //Creo una lista con las id de mis compañeros
 
-                        List<Long> lista = List.of(5747730047L, 6108736830L, 1534824490L, 5792621349L);
+                        List<Long> lista = List.of(5747730047L, 6108736830L, 1534824490L, 5792621349L, 6954840740L);
+
+                        //Dueños de las ids: Yourgen, Mia, Enner, Edgar, Rudy
 
                         //iterar la lista
 
-                        for (Long item : lista) {
-                            chat_id = item;
-                            sendText(chat_id, mensaje);
+                    for (Long item : lista) {
+
+                        //Por si la id a enviar no existe
+
+                        try {
+                            idgrupal = item;
+                            sendText(idgrupal, mensaje);
+                        } catch (Exception e) {
+                            System.err.println("Error al enviar mensaje a ID " + item + ": " + e.getMessage());
                         }
-
-                        //Le mando un mensaje al usuario en caso que no haya puesto nada luego de /send
-
-                    }else
-                {
+                    }
+                    //Le mando un mensaje al usuario en caso que no haya puesto nada luego de /send
+                } else {
                     sendText(chat_id, "Uso incorrecto del comando. Por favor escriba algo luego de /send");
                 }
             }
+
             System.out.println("User id: " + chat_id + " Message: " + message_text);
 
         }
