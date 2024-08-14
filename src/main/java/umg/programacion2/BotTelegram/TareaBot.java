@@ -2,6 +2,8 @@ package umg.programacion2.BotTelegram;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -61,6 +63,7 @@ public class TareaBot extends TelegramLongPollingBot {
                 mensaje += "/progra\n";
                 mensaje += "/hola\n";
                 mensaje += "/cambio (cantidad en euros)\n";
+                mensaje += "/send (espacio del mensaje)\n";
                 sendText(chat_id, mensaje);
             }
 
@@ -137,15 +140,51 @@ public class TareaBot extends TelegramLongPollingBot {
 
                         sendText(chat_id, mensaje);
 
+                        //Para enviar un mensaje a 4 de mis compañeros
+
                     }catch (NumberFormatException e){
                         // Manejo de error en caso de que el parámetro no sea un número válido
                         sendText(chat_id, "Error: La cantidad ingresada no es válida. Por favor, ingresa un número.");
                     }
                 } else {
-                sendText(chat_id, "Uso incorrecto del comando. Debes ingresar la cantidad después de /cambio.");
+                sendText(chat_id, "Uso incorrecto del comando. Por favor ingresar la cantidad después de /cambio.");
             }
             }
 
+            //Comando para mandar mensaje a mis compañeros
+
+            if(message_text.toLowerCase().startsWith("/send")) {
+
+                //Extraigo el mensaje luego del /send
+
+                String mensaje = message_text.replaceAll("(?i)/send", "").trim();
+
+                //Corroboro que el usuario haya escrito algo luego del /send
+
+                if (!mensaje.isEmpty()) {
+
+                    //Paso a mayuscula la primera letra luego de Send
+
+                        mensaje = mensaje.substring(0, 1).toUpperCase() + mensaje.substring(1);
+
+                        //Creo una lista con las id de mis compañeros
+
+                        List<Long> lista = List.of(5747730047L, 6108736830L, 1534824490L, 5792621349L);
+
+                        //iterar la lista
+
+                        for (Long item : lista) {
+                            chat_id = item;
+                            sendText(chat_id, mensaje);
+                        }
+
+                        //Le mando un mensaje al usuario en caso que no haya puesto nada luego de /send
+
+                    }else
+                {
+                    sendText(chat_id, "Uso incorrecto del comando. Por favor escriba algo luego de /send");
+                }
+            }
             System.out.println("User id: " + chat_id + " Message: " + message_text);
 
         }
